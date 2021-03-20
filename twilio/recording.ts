@@ -1,0 +1,1 @@
+export const getWavUrl = (sid: string) => `https://api.twilio.com/2010-04-01/Accounts/${process.env.TWILIO_SID}/Recordings/${sid}`
