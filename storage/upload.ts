@@ -5,10 +5,12 @@ const storage = new Storage()
 const bucket = storage.bucket('answerphone')
 
 export const storeUri = async (uri: string, path: string) => {
-  console.log("STORE")
+  console.log("Storing file.")
   const file = bucket.file(`${path}-${Date.now()}.wav`)
-  const stream = file.createWriteStream()
   const download = await fetch(uri)
+  if (download.status != 200) {
+    throw new Error("not found.")
+  }
   const contents = await download.buffer()
   await file.save(contents)
 
