@@ -31,8 +31,8 @@ app.get("/favicon.ico", (req, res) => {
 // } );
 
 app.get('/call', twilioStartRecording)
-app.get(`/${PATHS.recordingStatusCallback}`, recordingStatusCallback)
-app.get(`/${PATHS.hangup}`, hangup)
+app.post(`/${PATHS.recordingStatusCallback}`, recordingStatusCallback)
+app.post(`/${PATHS.hangup}`, hangup)
 app.listen( port, () => {
     console.log( `server started ${ port }` );
 } );
