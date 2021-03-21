@@ -1,5 +1,9 @@
 import * as express from 'express';
 import { twiml } from 'twilio';
+import { sendEmail } from '../email/email';
+import { transcribe } from '../speech/speech';
+import { store } from '../storage/upload';
+import { getWav } from '../twilio/recording';
 
 export const PATHS = {
   recordingStatusCallback: "rsc",
@@ -27,7 +31,26 @@ export const hangup = (req: express.Request, res: express.Response) => {
   res.send(vr.toString())
 }
 
-export const recordingStatusCallback = (req: express.Request, res: express.Response) => {
-  console.log(JSON.stringify(req.body))
+export const recordingStatusCallback = async (req: express.Request, res: express.Response) => {
+ 
+  const {
+    AccountSid,
+    CallSid,
+    RecordingSid,
+    RecordingUrl,
+    RecordingStatus,
+    RecordingDuration,  
+  } = req.body as Record<string, string>
+  
+console.log('downloading call')
+  const buffer = await getWav(RecordingUrl)
+  const stored = await store(buffer, RecordingSid)
+  console.log("stored as", stored)
+  const t = await transcribe(stored)
+  console.log("transcript", t)
+  const email = await sendEmail(t, buffer)
+  console.log("sent", email)
+  // console.log(JSON.stringify(req.body)s)
+
   res.send("OKAY COOL")
 }
