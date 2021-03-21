@@ -3,6 +3,7 @@ import { twiml } from 'twilio';
 import { sendEmail } from '../email/email';
 import { transcribe } from '../speech/speech';
 import { store } from '../storage/upload';
+import { getCall } from '../twilio/call';
 import { getWav } from '../twilio/recording';
 
 export const PATHS = {
@@ -43,14 +44,16 @@ export const recordingStatusCallback = async (req: express.Request, res: express
   } = req.body as Record<string, string>
   
 console.log('downloading call')
-  const buffer = await getWav(RecordingUrl)
-  const stored = await store(buffer, RecordingSid)
+  const buffer = getWav(RecordingUrl)
+  const fcall = getCall(CallSid);
+  const stored = store(await buffer, RecordingSid)
   console.log("stored as", stored)
-  const t = await transcribe(stored)
+  const t =  transcribe(await stored)
   console.log("transcript", t)
-  const email = await sendEmail(t, buffer)
+  const call = await fcall;
+  console.log(call.from, call.fromFormatted, call.forwardedFrom)
+  const email = await sendEmail({ transcription: await t, recording: await buffer, from: call.fromFormatted })
   console.log("sent", email)
-  // console.log(JSON.stringify(req.body)s)
 
   res.send("OKAY COOL")
 }
