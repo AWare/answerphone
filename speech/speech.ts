@@ -1,17 +1,17 @@
 // Imports the Google Cloud client library
-import speech  from '@google-cloud/speech'
+import speech from "@google-cloud/speech";
 
 // Creates a client
 const client = new speech.SpeechClient();
 
 export const transcribe = async (uri: string) => {
   const audio = {
-    uri
-  }
+    uri,
+  };
   const config = {
-    encoding: 'LINEAR16',
+    encoding: "LINEAR16",
     sampleRateHertz: 8000,
-    languageCode: 'en-GB',
+    languageCode: "en-GB",
   } as const;
   const request = {
     audio: audio,
@@ -19,8 +19,8 @@ export const transcribe = async (uri: string) => {
   };
   const [response] = await client.recognize(request);
   const transcription = response.results
-    .map(result => result.alternatives[0].transcript)
-    .join('\n');
+    .map((result) => result.alternatives[0].transcript)
+    .join("\n");
   console.log(`Transcription: ${transcription}`);
-  return transcription
-}
+  return transcription;
+};
