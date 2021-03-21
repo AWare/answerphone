@@ -44,13 +44,24 @@ export const recordingStatusCallback = async (req: express.Request, res: express
   } = req.body as Record<string, string>
   
   if (process.env.TWILIO_SID !== AccountSid) {
-    console.log("Help, I've been hacked.")
+    console.error("Help, I've been hacked.", AccountSid)
+    console.error("call", CallSid)
+    console.error("recording", RecordingSid)
+    res.sendStatus(500)
+    return;
   }
+  const fcall = getCall(CallSid);
+  if (RecordingStatus == 'failed') {
+  const email = await sendEmail({  from: (await fcall).fromFormatted })
+  console.log("sent", email)
+
+  res.send("NOT COOL")
+  }
+  
 
   console.log('downloading call')
   
   const buffer = getWav(RecordingUrl)
-  const fcall = getCall(CallSid);
   const stored = store(await buffer, RecordingSid)
   console.log("stored as", stored)
   const t =  transcribe(await stored)
