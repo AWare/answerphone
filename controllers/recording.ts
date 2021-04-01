@@ -15,9 +15,10 @@ export const twilioStartRecording = (
   req: express.Request,
   res: express.Response
 ) => {
-  let vr = new twiml.VoiceResponse();
-  vr.say("Hi, you've reached Alex's robot voicemail. Please leave a message.");
+  const { } = req.body
 
+  let vr = new twiml.VoiceResponse();
+  vr.play(process.env.GREETING);
   vr.record({
     maxLength: 120,
     recordingStatusCallback: PATHS.recordingStatusCallback,

@@ -19,7 +19,7 @@ export const sendEmail = async ({
     },
   });
 
-  const text = `${transcription || "no audio"} from ${from}`;
+  const text = `${transcription || "no audio"} from ${from} \n\n https://github.com/aware/answerphone`;
   const attachments = recording
     ? [
         {
