@@ -11,7 +11,7 @@ RUN yarn build
 
 ## Run
 
-FROM node:15-alpine
+FROM node:16-alpine
 
 WORKDIR /usr/src/app
 COPY package.json ./
