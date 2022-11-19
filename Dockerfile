@@ -1,6 +1,6 @@
 ## BUILD
 
-FROM node:15-alpine
+FROM node:18-alpine
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
@@ -11,7 +11,7 @@ RUN yarn build
 
 ## Run
 
-FROM node:16-alpine
+FROM node:18-alpine
 
 WORKDIR /usr/src/app
 COPY package.json ./
