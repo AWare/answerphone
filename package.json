@@ -25,7 +25,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node --es-module-specifier-resolution=node dist/index.js",
     "fix": "prettier --write ."
   },
   "type": "module"
